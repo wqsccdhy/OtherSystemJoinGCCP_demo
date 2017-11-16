@@ -60,13 +60,13 @@ public class Content implements IContext {
     private Content() {
         //TODO 按照自己的具体情况实现下面参数内容 异构系统端消息
         contextmap.put(IP, "10.5.2.252");
-        contextmap.put(PORT, "8080");
+        contextmap.put(PORT, "8087");
         contextmap.put(APPLICATION_NAME, "OtherSystemJoinGCCP_demo");//一定要写工程或者服务的名称
         contextmap.put(SYSTEM_ID, systemId + "");
 
         //设置交换平台对象，设置地址和IP,客户生产环境对应值由我方提供 gccp信息
-        serverSystem.setIp("59.215.200.39");
-        serverSystem.setPort(80);
+        serverSystem.setIp("10.5.4.155");
+        serverSystem.setPort(8083);
         serverSystem.setAppName("seeyon");
         Date currentTime = new Date();
         //设置当前系统的信息

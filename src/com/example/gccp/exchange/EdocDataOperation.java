@@ -58,7 +58,7 @@ public class EdocDataOperation implements IExchangeOperation {
 		summary.setCreateTime(new Timestamp(System.currentTimeMillis()));// TODO
 																			// 设置创建时间
 		summary.setCreatePerson("张三");// 创建人
-		summary.setSendUnitId("Account|-6471354914145743078");// 发送单位ID
+		summary.setSendUnitId("Account|" + SendDataMain.sendOrgId);// 发送单位ID
 		summary.setDocMark("测试《2016》1号");// 设置文号
 		summary.setVarchar20(Content.getInstance().getContextParameter(
 				IContext.SYSTEM_ID)
@@ -67,7 +67,8 @@ public class EdocDataOperation implements IExchangeOperation {
 		summary.setKeywords("备注");// 备注
 		// writeStringToFile("summaryArray", summary);
 
-		Long accountId = -6471354914145743078L;
+		//Long accountId = -6471354914145743078L;
+		Long accountId = SendDataMain.recOrgId;
 		// 设置公文交换发送对象
 		EdocSendRecord sendRecord = new EdocSendRecord();
 		sendRecord.setIdIfNew();
@@ -82,7 +83,7 @@ public class EdocDataOperation implements IExchangeOperation {
 		sendRecord.setSendedNames("省政府办公厅");// TODO
 														// 设置送往单位或者部门名称，以、隔开,如：单位1、部门2、单位2
 		sendRecord
-				.setSendedTypeIds("Account|-552210171162901721");// TODO
+				.setSendedTypeIds("Account|" + accountId);// TODO
 														 // 设置送往单位或者部门类型和id，以(,)隔开，如：Account|123456,Department|654321,Account|123654
 		sendRecord.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		sendRecord.setSendTime(new Timestamp(System.currentTimeMillis()));
@@ -92,7 +93,7 @@ public class EdocDataOperation implements IExchangeOperation {
 		//sendRecord.setSendUserId(-352442265819722256L);// TODO
 														// 发送者id，例子中为财政厅公文收发员id
 		
-		sendRecord.setSendUserId(679193308421245219l);// TODO 发送者id
+		sendRecord.setSendUserId(SendDataMain.sendMemberId);// TODO 发送者id
 		
 		sendRecord.setStatus(Constants.C_iStatus_Sent);// 设置交换对象为已发送状态
 		sendRecord.setCopies(10);

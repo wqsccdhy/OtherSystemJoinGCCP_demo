@@ -20,6 +20,18 @@ import com.seeyon.v3x.plugin.gccp.transfers.TransfersManager;
 import com.seeyon.v3x.plugin.gccp.util.ProtocolUtil;
 
 public class SendDataMain {
+	//发文单位ID
+	public static Long sendOrgId = 7630217338153749835L;
+	
+	//发文人员ID
+	public static Long sendMemberId = 8713599982244744593L;
+	
+	//公文接收单位ID
+	public static Long recOrgId = 5647708944559655583L;
+	
+	//公文接收人员ID
+	public static Long recMemberId = -2114305908855324574L;
+	
 	public static void main(String[] args) throws Exception {
 		SendDataMain dataMain = new SendDataMain();
 		dataMain.sendDataToTarger();
@@ -29,14 +41,14 @@ public class SendDataMain {
 		GCCPRequestDO gccpRequestDO = new GCCPRequestDO();
 		Content content = Content.getInstance();
 		gccpRequestDO.setGroupId(content.getSelfSystem().getRegisterCode());
-		gccpRequestDO.setAccountId(-6471354914145743078L);
+		gccpRequestDO.setAccountId(sendOrgId);//发文单位ID
 		gccpRequestDO.setTitle("测试财政厅发文至办公厅_wq");
 		gccpRequestDO.setDataId(UUIDLong.longUUID());// TODO 业务id
 		gccpRequestDO.setCreateTime(new Date());
 		gccpRequestDO.setId(UUIDLong.longUUID());
 		gccpRequestDO.setSenderAccountName("测试单位1_wq_cd");// 交换请求发送单位名称
 		gccpRequestDO.setSenderName("测试单位1_wq_cd人员");// 交换请求发送者名称
-		gccpRequestDO.setSenderId(-352442265819722256L);// TODO 发送者的id
+		gccpRequestDO.setSenderId(sendMemberId);// TODO 发送者的id
 		gccpRequestDO
 				.setSenderType(GCCPEnum.ExchangeSenderOrReceiveTypeEnum.ACCOUNT
 						.getKey());
@@ -65,11 +77,11 @@ public class SendDataMain {
 		
 		
 		GCCPResponseDO respdo2 = new GCCPResponseDO();
-		respdo2.setAccountId(-552210171162901721L);// 设置公文送往单位id
+		respdo2.setAccountId(recOrgId);// 设置公文送往单位id
 		respdo2.setId(UUIDLong.longUUID());
 		respdo2.setReceiverType(ExchangeSenderOrReceiveTypeEnum.ACCOUNT
 				.getKey());
-		respdo2.setReceiverId(7172509443012119370L);// 接收人教育厅公文收发员
+		respdo2.setReceiverId(recMemberId);// 接收人教育厅公文收发员
 		respdo2.setReceiverName("测试");// 公文送往单位名称
 		responseDOList.add(respdo2);
 		
