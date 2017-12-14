@@ -212,6 +212,7 @@ public class EdocDataOperation implements IExchangeOperation {
 
 			EdocRecieveRecord recieveRecord = new EdocRecieveRecord();
 			recieveRecord.setIdIfNew();
+			//recieveRecord.setStatus(sendRecord.getStatus());
 			recieveRecord.setCreateTime(sendRecord.getCreateTime());
 			recieveRecord.setSender(sendRecord.getSendUserNames());
 			recieveRecord.setSubject(sendRecord.getSubject());
