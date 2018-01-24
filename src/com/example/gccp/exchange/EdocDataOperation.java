@@ -3,6 +3,9 @@ package com.example.gccp.exchange;
 import java.io.File;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -52,6 +55,7 @@ public class EdocDataOperation implements IExchangeOperation {
 		// 设置公文实体类
 		EdocSummary summary = new EdocSummary();// 标准平台，公文对象
 		summary.setId(dataId);// TODO 设置唯一标识id
+		
 		summary.setSubject("测试财政厅发文至办公厅" + sdf.format(new Date()));// 设置标题
 		summary.setEdocType(0);
 		summary.setStartTime(new Timestamp(System.currentTimeMillis()));
@@ -72,7 +76,7 @@ public class EdocDataOperation implements IExchangeOperation {
 		// 设置公文交换发送对象
 		EdocSendRecord sendRecord = new EdocSendRecord();
 		sendRecord.setIdIfNew();
-		sendRecord.setExchangeOrgId(accountId);// TODO 设置公文交换发文组织（单位或者部门）id
+		sendRecord.setExchangeOrgId(SendDataMain.sendOrgId);// TODO 设置公文交换发文组织（单位或者部门）id
 		sendRecord.setExchangeOrgName("贵州省财政厅");// TODO 设置发文组织名称
 		sendRecord.setExchangeType(Constants.C_iExchangeType_Org);// TODO 单位
 		// sendRecord.setExchangeType(Constants.C_iExchangeType_Dept);// TODO 部门
@@ -97,6 +101,10 @@ public class EdocDataOperation implements IExchangeOperation {
 		
 		sendRecord.setStatus(Constants.C_iStatus_Sent);// 设置交换对象为已发送状态
 		sendRecord.setCopies(10);
+		
+		//发文时对公文标题进行encode处理
+		sendRecord.setSubject(translateSubject(summary.getSubject()));
+		summary.setSubject(translateSubject(summary.getSubject()));
 
 		// writeStringToFile("sendRecordArray", sendRecord);
 
@@ -247,6 +255,7 @@ public class EdocDataOperation implements IExchangeOperation {
 		List<EdocSendDetail> sendDetails = new ArrayList<EdocSendDetail>();
 		Map<String, File> fileMapping = new HashMap<String, File>();
 		EdocSummary edocSummary = null;
+		EdocSendRecord edocSendRecord = null;
 		// TODO 针对standardata进行业务数据解析
 		DataPart part = null;
 		try {
@@ -266,7 +275,7 @@ public class EdocDataOperation implements IExchangeOperation {
 						Set<EdocBody> edocBodies = edocSummary.getEdocBodies();
 						// writeStringToFile("edocBodies", edocBodies);
 					} else if (obj instanceof EdocSendRecord) {
-						EdocSendRecord edocSendRecord = (EdocSendRecord) obj;
+						edocSendRecord = (EdocSendRecord) obj;
 						// writeStringToFile("edocSendRecord", edocSendRecord);
 					} else if (obj instanceof List) {
 						List<Serializable> list = (List<Serializable>) obj;
@@ -306,8 +315,14 @@ public class EdocDataOperation implements IExchangeOperation {
 				}
 
 			}
+			
+			//接收到数据后，需要对文件标题进行decode操作
+			edocSummary.setSubject(reversalSubject(edocSummary.getSubject()));
+	        edocSendRecord.setSubject(reversalSubject(edocSendRecord.getSubject()));
+			
 			for (Entry<String, EdocBody> entry : edocBodyMap.entrySet()) {
 				EdocBody edocBody = entry.getValue();
+				edocBody.getContent();
 				//正文类型为标准
 				if ("HTML".equals(edocBody.getContentType())) {
 					//正文内容
@@ -348,5 +363,42 @@ public class EdocDataOperation implements IExchangeOperation {
 		int indexOf = path.indexOf("WEB-INF");
 		String substring = path.substring(0, indexOf);
 		return substring;
+	}
+	
+	/**
+	 * 处理标题中的特殊字符
+	 * @param subject
+	 * @return
+	 */
+    private String translateSubject(String subject) {
+    	String value = "";
+		if (subject!=null && !subject.isEmpty()) {
+			try {
+				value = URLEncoder.encode(subject, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				value = "";
+				System.out.println("记录日志");
+			}
+		}
+		return value;
+	}
+    
+    /**
+     * 处理标题中的特殊字符
+     * @param subject
+     * @return
+     */
+    private String reversalSubject(String subject) {
+		String value = "";
+		if (subject!=null && !subject.isEmpty()) {
+			try {
+				value = URLDecoder.decode(subject, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				value = "";
+				System.out.println("记录日志");
+			}
+		}
+		return value;
+		
 	}
 }
