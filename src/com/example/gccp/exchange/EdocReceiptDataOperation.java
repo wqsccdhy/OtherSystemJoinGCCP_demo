@@ -20,7 +20,7 @@ public class EdocReceiptDataOperation implements IExchangeOperation {
 
     @Override
     public StandardData readSandard(GCCPRequestDO gccpRequestDO) throws GCCPException {
-        Long dataId = gccpRequestDO.getDataId();//建议该值为公文签收对象id，在收文EdocDataOperation.writeStandard方法中存在该对象，请保存后使用
+        Long dataId = gccpRequestDO.getDataId();//在收文EdocDataOperation.writeStandard方法中存在该对象，找到对应的EdocRecieveRecord，EdocRecieveRecord.getId请保存后使用
         StandardData standardData = new StandardData();
         //此处建议只做对象的获取与封装传递，签收、登记、退回、撤销不同的动作放在业务系统自身进行设置，例如调用发送交换请求处，但本示例为了达到业务说明，将不同的操作在此处进行说明
         EdocRecieveRecord edocRecieveRecord = new EdocRecieveRecord();//TODO 根据id获取签收对象，示例代码为了后续演示不做保存和获取代码实现，请自行实现该逻辑  
@@ -29,11 +29,11 @@ public class EdocReceiptDataOperation implements IExchangeOperation {
 //        edocRecieveRecord.setStatus(Constants.C_iStatus_Registered);//TODO 登记
 //        edocRecieveRecord.setEdocId(edocId);//公文id
 //        edocRecieveRecord.setRemark("请设置签收或者登记意见，当然也可以不设置");
-          edocRecieveRecord.setStatus(Constants.C_iStatus_Receive_StepBacked); //TODO 退回
-          edocRecieveRecord.setRecUser("recUser");
-//        edocRecieveRecord.setReplyId("replyId");//TODO 退回 replyId的值为文件EdocDataOperation中的writeStandard方法有个对象EdocRecieveRecord replyId=EdocRecieveRecord.getReplyId()
-//        edocRecieveRecord.setRecUserId(recUserId);//TODO 退回  谁回退的公文，就为该人员的id
-//        edocRecieveRecord.setExchangeOrgId(exchangeOrgId);//TODO 退回 交换单位id 比如文件是省直属发送给财政厅  exchangeOrgId为财政厅单位id
+        edocRecieveRecord.setStatus(Constants.C_iStatus_Receive_StepBacked); //TODO 退回
+        edocRecieveRecord.setRecUser("recUser");//签收或回退人员姓名
+        edocRecieveRecord.setReplyId("replyId");//TODO replyId的值为文件EdocDataOperation中的writeStandard方法有个对象EdocRecieveRecord replyId=EdocRecieveRecord.getReplyId()
+        edocRecieveRecord.setRecUserId(SendDataMain.sendMemberId);//TODO  谁回退或签收的公文，就为该人员的id
+//        edocRecieveRecord.setExchangeOrgId(exchangeOrgId);//TODO 交换单位id 比如文件是省直属发送给财政厅  exchangeOrgId为财政厅单位id
 //        edocRecieveRecord.setStepBackInfo("请设退回意见，当然也可以不设置");
 //        edocRecieveRecord.setStatus(Constants.C_iStatus_withdraw);//TODO 撤销 ，指发送后，当对方未处理，可以进行撤回，传递的对象是自身系统EdocDataOperation.readSandard产生的对象。
         standardData.addData(edocRecieveRecord);
@@ -54,6 +54,7 @@ public class EdocReceiptDataOperation implements IExchangeOperation {
                     recieveRecord.getRecUserId();//获取处理人id
                     recieveRecord.getEdocId();//获取公文对象id
                     recieveRecord.getReplyId();
+                    recieveRecord.getStepBackInfo();//退回原因
                     Timestamp recTime = recieveRecord.getRecTime();
                     String recUser = recieveRecord.getRecUser();
                     switch (status) {

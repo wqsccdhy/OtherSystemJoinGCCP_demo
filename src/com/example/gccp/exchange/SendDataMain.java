@@ -30,7 +30,7 @@ public class SendDataMain {
 	public static Long recOrgId = 5647708944559655583L;
 	
 	//公文接收人员ID
-	public static Long recMemberId = -2114305908855324574L;
+	//public static Long recMemberId = -2114305908855324574L;
 	
 	public static void main(String[] args) throws Exception {
 		SendDataMain dataMain = new SendDataMain();
@@ -81,7 +81,7 @@ public class SendDataMain {
 		respdo2.setId(UUIDLong.longUUID());
 		respdo2.setReceiverType(ExchangeSenderOrReceiveTypeEnum.ACCOUNT
 				.getKey());
-		respdo2.setReceiverId(recMemberId);// 接收人教育厅公文收发员
+		respdo2.setReceiverId(recOrgId);// 接收单位ID
 		respdo2.setReceiverName("测试");// 公文送往单位名称
 		responseDOList.add(respdo2);
 		
@@ -116,8 +116,7 @@ public class SendDataMain {
 		// CEP包from字段格式groupId,accountId,departmentId,individualId
 		cep.setFrom(ProtocolUtil.getFromHeader(gccpRequestDO));
 		// CEP包to字段格式groupId,accountId,departmentId,individualId|groupId,accountId,departmentId,individualId|..
-		List<GCCPResponseDO> gccpResponseDOs = gccpRequestDO
-				.getResponseDOList();
+		List<GCCPResponseDO> gccpResponseDOs = gccpRequestDO.getResponseDOList();
 		cep.setTo(ProtocolUtil.getToHeader(gccpResponseDOs));
 
 		GCCPExchangeServiceRequest espreq = new GCCPExchangeServiceRequest();

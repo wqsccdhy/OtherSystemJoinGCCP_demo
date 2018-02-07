@@ -1,15 +1,14 @@
-import java.util.ArrayList;
-import java.util.List;
+import net.sf.json.JSONObject;
 
-import com.seeyon.v3x.common.utils.UUIDLong;
-import com.seeyon.v3x.plugin.gccp.common.GCCPEnum.ExchangeSenderOrReceiveTypeEnum;
-import com.seeyon.v3x.plugin.gccp.exchange.cep.GCCPExchangePackage;
-import com.seeyon.v3x.plugin.gccp.exchange.domain.GCCPResponseDO;
-import com.seeyon.v3x.plugin.gccp.util.ProtocolUtil;
+import com.seeyon.v3x.exchange.domain.EdocRecieveRecord;
 
 public class Test {
 
 	public static void main(String[] args) {
+		
+		EdocRecieveRecord recieveRecord = new EdocRecieveRecord();
+		JSONObject fromObject = JSONObject.fromObject(recieveRecord);
+		System.out.println(recieveRecord);
 		
 		
 		String value = "Account|8408292373439008472";

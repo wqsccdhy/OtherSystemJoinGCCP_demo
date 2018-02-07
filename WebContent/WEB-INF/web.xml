@@ -22,6 +22,8 @@
 	</servlet-mapping>
 	<!-- demo结束 -->
 	
+	
+	<!--这部分请配置到异构的web.xml中 start  -->
 	<servlet>
 		<servlet-name>gccp</servlet-name>
 		<servlet-class>com.example.gccp.GCCPServicesServlet</servlet-class>
@@ -32,6 +34,8 @@
 		<servlet-name>gccp</servlet-name>
 		<url-pattern>/gccp/*</url-pattern>
 	</servlet-mapping>
+	<!--这部分请配置到异构的web.xml中 end  -->
+	
 	
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

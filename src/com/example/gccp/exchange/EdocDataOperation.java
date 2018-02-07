@@ -272,6 +272,7 @@ public class EdocDataOperation implements IExchangeOperation {
 						edocSummary = (EdocSummary) obj;
 						// writeStringToFile("edocSummary", edocSummary);
 						String sendUnitId = edocSummary.getSendUnitId();
+						edocSummary.getSendUnit();
 						Set<EdocBody> edocBodies = edocSummary.getEdocBodies();
 						// writeStringToFile("edocBodies", edocBodies);
 					} else if (obj instanceof EdocSendRecord) {
@@ -286,11 +287,16 @@ public class EdocDataOperation implements IExchangeOperation {
 							} else if (serializable instanceof EdocRecieveRecord) {
 								EdocRecieveRecord record = (EdocRecieveRecord) serializable;
 								record.getSubject();
-								String replyId = record.getReplyId();
-								edocRecieveRecords
-										.add((EdocRecieveRecord) serializable);
+								long exchangeOrgId = record.getExchangeOrgId();//接收单位id
+								//找到对应的接收单位
+								if(SendDataMain.sendOrgId.equals(exchangeOrgId)){
+									Long id = record.getId();
+									String replyId = record.getReplyId();
+								}
 								
-								record.getExchangeOrgId();
+								/*edocRecieveRecords
+										.add((EdocRecieveRecord) serializable);*/
+								
 							} else if (serializable instanceof Affair) {
 								// affairs.add((Affair) serializable);
 							} else if (serializable instanceof EdocSendDetail) {
